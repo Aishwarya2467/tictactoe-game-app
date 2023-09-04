@@ -7,3 +7,9 @@ h1{
     padding: 40px;
     text-align: center;
 }
+button{
+    font-size: 30px;
+    border-radius: 10%;
+    background-color: bisque;
+    color: black;
+}
