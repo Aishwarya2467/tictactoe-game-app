@@ -1,0 +1,9 @@
+body{
+    background-color: black;
+}
+h1{
+    color: aliceblue;
+    font-size: 60px;
+    padding: 40px;
+    text-align: center;
+}
