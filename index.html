@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tac Toe</title>
+    <style>
+        /* Reset some default styles for better consistency */
+        body, h1, p {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Center the game board on the page */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #98e0e9;
+            flex-direction: column;
+        }
+
+        /* Style the header */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 150px;
+        }
+
+        /* Style the game board container */
+        .board-container {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            background-color: #fff;
+            border: 1px solid #000;
+            padding: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Style the game board cells */
+        .cell {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+            font-size: 24px;
+            border: 2px solid #000;
+            cursor: pointer;
+        }
+
+        /* Style the winner text */
+        #winner {
+            text-align: center;
+            font-size: 24px;
+            margin-top: auto; /* Align to the bottom */
+        }
+    </style>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <div class="board-container" id="board">
+        <!-- The game board will be generated here -->
+    </div>
+    <p id="winner"></p>
+
+    <script>
+        // JavaScript code for the Tic Tac Toe game
+        // ... (same JavaScript code as before)
+        const board = document.getElementById("board");
+        const winnerText = document.getElementById("winner");
+        let currentPlayer = "X";
+        let gameBoard = ["", "", "", "", "", "", "", "", ""];
+        let gameOver = false;
+
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            for (const combo of winningCombinations) {
+                const [a, b, c] = combo;
+                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    return gameBoard[a];
+                }
+            }
+
+            if (gameBoard.includes("") === false) {
+                return "Tie";
+            }
+
+            return null;
+        }
+
+        function computerMove() {
+            // Implement a simple computer AI (random move)
+            const availableMoves = gameBoard.reduce((acc, cell, index) => {
+                if (cell === "") {
+                    acc.push(index);
+                }
+                return acc;
+            }, []);
+
+            if (availableMoves.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableMoves.length);
+                const computerIndex = availableMoves[randomIndex];
+                gameBoard[computerIndex] = "O";
+                const cell = document.querySelector(`[data-index="${computerIndex}"]`);
+                cell.innerText = "O";
+                currentPlayer = "X";
+                checkGameOver();
+            }
+        }
+
+        function handleClick(event) {
+            const cellIndex = event.target.dataset.index;
+            if (gameBoard[cellIndex] === "" && !gameOver) {
+                gameBoard[cellIndex] = currentPlayer;
+                event.target.innerText = currentPlayer;
+                currentPlayer = "X";
+                checkGameOver();
+                if (!gameOver) {
+                    setTimeout(computerMove, 500); // Delay computer move for effect
+                }
+            }
+        }
+
+        function checkGameOver() {
+            const winner = checkWinner();
+            if (winner) {
+                if (winner === "Tie") {
+                    winnerText.innerText = "It's a Tie!";
+                } else {
+                    winnerText.innerText = `${winner} wins!`;
+                }
+                gameOver = true;
+            }
+        }
+
+        function createBoard() {
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.dataset.index = i;
+                cell.addEventListener("click", handleClick);
+                board.appendChild(cell);
+            }
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>
